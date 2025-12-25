@@ -8,6 +8,7 @@ import uz.app.ecommerce.entity.dto.CartItemCreateDto;
 import uz.app.ecommerce.entity.dto.CartResponseDto;
 import uz.app.ecommerce.mapper.CartMapper;
 import uz.app.ecommerce.repository.*;
+import uz.app.ecommerce.security.SecurityUtil;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -26,9 +27,8 @@ public class CartService {
 
     // ⚠️ временно: берём первого юзера из БД (потом будет из Security)
     private User getCurrentUser() {
-        return userRepository.findAll().stream()
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        String email = SecurityUtil.getCurrentUserEmail();
+        return userRepository.findByEmail(email);
     }
 
     public CartResponseDto getMyCart() {
